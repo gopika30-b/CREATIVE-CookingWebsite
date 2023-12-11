@@ -1,0 +1,49 @@
+<%- include('head.ejs') %>
+      <div>
+        <form>
+            <h3>Choose required Ingredients :</h3> <br>
+            <div style="display: block; text-align: left; font-size: large; padding-left: 45%;">
+              <% for (let ingredient of ingredients) { %>
+                <label><input type="checkbox" value="<%= ingredient %>"><span>  </span><%= ingredient %></label><br><br>
+              <% } %>
+            </div>
+              <br><hr><br><center><button onclick="generateTXT()" class="bb1">Download(.txt)</button></center><br><br>
+          </form>   
+      </div>    
+<footer>
+        <p>&copy; 2023 Creative. All rights reserved.</p>
+</footer>
+<script>
+  function generateTXT() {
+  var checkedCheckboxes = document.querySelectorAll('input[type=checkbox]:checked');
+  var uncheckedCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
+  var txtHead1 = 'Items to be bought :\n';
+  var txtHead2 = 'Items that are already available :\n';
+  var txtData1 = '';
+  var txtData2 = '';
+  var space = "\n";
+  checkedCheckboxes.forEach(function(checkbox) {
+    var item = checkbox.getAttribute("value");
+    txtData1 += item + "\n";
+  });
+  uncheckedCheckboxes.forEach(function(checkbox) {
+    var item = checkbox.getAttribute("value");
+    if (item) {
+      txtData2 += item + "\n";
+    }
+  });
+  var finalText = txtHead1 + txtData1 + space + txtHead2 + txtData2;
+  var outputElement = document.createElement("pre");
+  outputElement.textContent = finalText;
+  document.body.appendChild(outputElement);
+  var blob = new Blob([finalText], { type: "text;charset=utf-8" });
+  var url = URL.createObjectURL(blob);
+  var link = document.createElement("a");
+  link.href = url;
+  link.download = "buylist.txt";
+  link.click();
+}
+</script>
+<script src="./main.js"></script>    
+</body>     
+</html>
